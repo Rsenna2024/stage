@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BookController extends Controller
 {
@@ -82,5 +83,30 @@ class BookController extends Controller
          $books->delete(); //delete een boek
 
           return redirect()->route('books.index')->with('success', 'Boek is verwijderd');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $dbBooks = Book::all();
+
+        $googleBooks = [];
+
+        if (!empty($query)) {
+            $response = Http::get('https://www.googleapis.com/books/v1/volumes', [
+                'q' => $query,
+                'maxResults' => 10,
+            ]);
+
+            $json = $response->json();
+            $googleBooks = $json['items'] ?? [];
+        }
+
+        return view('books.index', [
+            'books' => $dbBooks,
+            'googleBooks' => $googleBooks,
+            'query' => $query,
+        ]);
     }
 }

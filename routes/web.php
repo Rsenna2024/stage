@@ -17,8 +17,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::middleware('auth')->prefix('dashboard')->group(function () {
-        Route::resource('books', BookController::class);
+ Route::middleware('auth')->prefix('dashboard')->group(function () {
+    // 1️⃣ Zet search route eerst
+    Route::get('/books/search', [BookController::class, 'search'])->name('books.search');
+
+    // 2️⃣ Daarna pas de resource route
+    Route::resource('books', BookController::class);
     });
 });
 
