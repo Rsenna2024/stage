@@ -10,7 +10,10 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
+                    <br>
+                    <a href="{{ route('books.index') }}">Klik hier voor de catalogus</a>
                 </div>
+                
             </div>
         </div>
     </div>
